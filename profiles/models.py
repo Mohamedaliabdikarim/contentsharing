@@ -1,6 +1,10 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from cloudinary.models import CloudinaryField
 
 
 class Profile(models.Model):
@@ -10,7 +14,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
     image = models.ImageField(
-        upload_to='images/', default='../default_profile_vc7caf'
+        upload_to='images/', default='../default_profile_tdu7ix'
     )
 
     class Meta:
