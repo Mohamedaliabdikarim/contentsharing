@@ -1,10 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-from cloudinary.models import CloudinaryField
+
 
 
 class Profile(models.Model):
