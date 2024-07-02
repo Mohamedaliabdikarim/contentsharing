@@ -29,15 +29,15 @@ class ContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ['id', 'title', 'content', 'owner', 'is_owner','created_at', 'updated_at', 'categories', 'image', 'profile_id', 'profile_image']
+        fields = ['id', 'title', 'text', 'owner', 'is_owner','created_at', 'updated_at', 'categories', 'image', 'profile_id', 'profile_image']
 
     def create(self, validated_data):
         categories_data = validated_data.pop('categories')
-        content = Content.objects.create(**validated_data)
+        text = Content.objects.create(**validated_data)
         for category_name in categories_data:
             category = Category.objects.get(name=category_name)
-            content.categories.add(category)
-        return content
+            text.categories.add(category)
+        return text
     
     def get_is_owner(self, obj):
         request = self.context['request']

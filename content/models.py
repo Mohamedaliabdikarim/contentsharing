@@ -17,12 +17,15 @@ class Category(models.Model):
 
 class Content(models.Model):
     title = models.CharField(max_length=255)
-    content = models.TextField()
+    text = models.TextField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     categories = models.ManyToManyField(Category, related_name='contents')
     image = models.ImageField(upload_to='images/', default='../default_profile_tdu7ix', null=True, blank=True)
 
+    class Meta:
+        ordering = ['-created_at']
+    
     def __str__(self):
-        return self.title
+        return f'{self.id} {self.title}'
