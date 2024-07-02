@@ -14,9 +14,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'created_at', 'updated_at')
-    list_filter = ('author', 'created_at', 'categories')
-    search_fields = ('title', 'body', 'author__username', 'categories__name')
+    list_display = ('title', 'owner', 'created_at', 'updated_at')
+    list_filter = ('owner', 'created_at', 'categories')
+    search_fields = ('title', 'content', 'owner__username', 'categories__name')
     filter_horizontal = ('categories',)
-
-

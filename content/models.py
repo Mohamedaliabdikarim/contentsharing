@@ -17,8 +17,8 @@ class Category(models.Model):
 
 class Content(models.Model):
     title = models.CharField(max_length=255)
-    body = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     categories = models.ManyToManyField(Category, related_name='contents')
