@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Content, Category
+from likes.models import Like
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,6 +18,11 @@ class ContentSerializer(serializers.ModelSerializer):
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
     profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
     image = serializers.ImageField(required=False, allow_null=True)
+    like_id = serializers.SerializerMethodField()
+    like_id = serializers.SerializerMethodField()
+    likes_count = serializers.ReadOnlyField()
+    comments_count = serializers.ReadOnlyField()
+
 
     def validate_image(self, value):
         if value and value.size > 2 * 1024 * 1024:
@@ -29,7 +35,11 @@ class ContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ['id', 'title', 'text', 'owner', 'is_owner','created_at', 'updated_at', 'categories', 'image', 'profile_id', 'profile_image']
+        fields = ['id', 'title', 'text',
+                   'owner', 'is_owner','created_at', 'updated_at',
+                   'categories', 'image', 'profile_id', 
+                   'profile_image','like_id','likes_count', 
+                   'comments_count',]
 
     def create(self, validated_data):
         categories_data = validated_data.pop('categories')
@@ -42,3 +52,12 @@ class ContentSerializer(serializers.ModelSerializer):
     def get_is_owner(self, obj):
         request = self.context['request']
         return request.user == obj.owner
+    
+    def get_like_id(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            like = Like.objects.filter(
+                owner=user, text=obj
+            ).first()
+            return like.id if like else None
+        return None

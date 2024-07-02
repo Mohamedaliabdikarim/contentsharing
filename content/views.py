@@ -1,105 +1,20 @@
-from django.http import Http404
-from rest_framework import status, permissions
-from rest_framework.response import Response
+from django.db.models import Count
+from rest_framework import generics, permissions, filters
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from contentsharing.permissions import IsOwnerOrReadOnly
 from .models import Content, Category
 from .serializers import ContentSerializer, CategorySerializer
-from contentsharing.permissions import IsOwnerOrReadOnly
+from django.http import Http404
 
-class ContentList(APIView):
+class CategoryList(generics.ListCreateAPIView):
     """
-    List content or create content if logged in
+    List all categories or create a new category.
     """
-    serializer_class = ContentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def get(self, request):
-        contents = Content.objects.all()
-        serializer = ContentSerializer(
-            contents, many=True, context={'request': request}
-        )
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = ContentSerializer(
-            data=request.data, context={'request': request}
-        )
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(
-                serializer.data, status=status.HTTP_201_CREATED
-            )
-        return Response(
-            serializer.errors, status=status.HTTP_400_BAD_REQUEST
-        )
-
-class ContentDetail(APIView):
-    """
-    Retrieve a content item and edit or delete it if you own it
-    """
-    permission_classes = [IsOwnerOrReadOnly]
-    serializer_class = ContentSerializer
-
-    def get_object(self, pk):
-        try:
-            content = Content.objects.get(pk=pk)
-            self.check_object_permissions(self.request, content)
-            return content
-        except Content.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk):
-        text = self.get_object(pk)
-        serializer = ContentSerializer(
-            text, context={'request': request}
-        )
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        text = self.get_object(pk)
-        serializer = ContentSerializer(
-            text, data=request.data, context={'request': request}
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(
-            serializer.errors, status=status.HTTP_400_BAD_REQUEST
-        )
-
-    def delete(self, request, pk):
-        text = self.get_object(pk)
-        text.delete()
-        return Response(
-            status=status.HTTP_204_NO_CONTENT
-        )
-
-class CategoryList(APIView):
-    """
-    List categories or create a category if logged in
-    """
+    queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def get(self, request):
-        categories = Category.objects.all()
-        serializer = CategorySerializer(
-            categories, many=True, context={'request': request}
-        )
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = CategorySerializer(
-            data=request.data, context={'request': request}
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                serializer.data, status=status.HTTP_201_CREATED
-            )
-        return Response(
-            serializer.errors, status=status.HTTP_400_BAD_REQUEST
-        )
 
 class CategoryDetail(APIView):
     """
@@ -141,3 +56,42 @@ class CategoryDetail(APIView):
         return Response(
             status=status.HTTP_204_NO_CONTENT
         )
+
+class ContentList(generics.ListCreateAPIView):
+    """
+    List posts or create a post if logged in
+    The perform_create method associates the post with the logged in user.
+    """
+    serializer_class = ContentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = Content.objects.annotate(
+        likes_count=Count('likes', distinct=True),
+        comments_count=Count('comment', distinct=True)
+    ).order_by('-created_at')
+    filter_backends = [
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    ]
+    search_fields = [
+        'owner__username',
+        'title',
+    ]
+    ordering_fields = [
+        'likes_count',
+        'comments_count',
+        'likes__created_at',
+    ]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+class ContentDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve a post and edit or delete it if you own it.
+    """
+    serializer_class = ContentSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+    queryset = Content.objects.annotate(
+        likes_count=Count('likes', distinct=True),
+        comments_count=Count('comment', distinct=True)
+    ).order_by('-created_at')
