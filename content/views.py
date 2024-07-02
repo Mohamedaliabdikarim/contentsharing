@@ -6,7 +6,9 @@ from rest_framework import status
 from contentsharing.permissions import IsOwnerOrReadOnly
 from .models import Content, Category
 from .serializers import ContentSerializer, CategorySerializer
-from django.http import Http404
+from django_filters.rest_framework import DjangoFilterBackend
+
+
 
 class CategoryList(generics.ListCreateAPIView):
     """
@@ -71,10 +73,18 @@ class ContentList(generics.ListCreateAPIView):
     filter_backends = [
         filters.OrderingFilter,
         filters.SearchFilter,
+        DjangoFilterBackend,
+    ]
+
+    filterset_fields = [
+        'owner__followed__owner__profile',
+        'likes__owner__profile',
+        'owner__profile','categories__name'
     ]
     search_fields = [
         'owner__username',
         'title',
+        'categories__name',
     ]
     ordering_fields = [
         'likes_count',

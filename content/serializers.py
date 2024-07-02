@@ -19,10 +19,8 @@ class ContentSerializer(serializers.ModelSerializer):
     profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
     image = serializers.ImageField(required=False, allow_null=True)
     like_id = serializers.SerializerMethodField()
-    like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
-
 
     def validate_image(self, value):
         if value and value.size > 2 * 1024 * 1024:
@@ -33,13 +31,18 @@ class ContentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Image width larger than 4096px!')
         return value
 
+    def validate(self, data):
+        if not data.get('categories'):
+            raise serializers.ValidationError("At least one category must be selected.")
+        return data
+
     class Meta:
         model = Content
         fields = ['id', 'title', 'text',
                    'owner', 'is_owner','created_at', 'updated_at',
                    'categories', 'image', 'profile_id', 
                    'profile_image','like_id','likes_count', 
-                   'comments_count',]
+                   'comments_count', 'created_at',]
 
     def create(self, validated_data):
         categories_data = validated_data.pop('categories')
