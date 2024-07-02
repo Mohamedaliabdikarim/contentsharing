@@ -5,7 +5,6 @@ from .models import Profile
 from .serializers import ProfileSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
-
 class ProfileList(generics.ListAPIView):
     """
     List all profiles.
@@ -34,7 +33,6 @@ class ProfileList(generics.ListAPIView):
         'owner__followed__created_at',
     ]
 
-
 class ProfileDetail(generics.RetrieveUpdateAPIView):
     """
     Retrieve or update a profile if you're the owner.
@@ -46,5 +44,3 @@ class ProfileDetail(generics.RetrieveUpdateAPIView):
         following_count=Count('owner__following', distinct=True)
     ).order_by('-created_at')
     serializer_class = ProfileSerializer
-
-

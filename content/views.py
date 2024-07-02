@@ -1,14 +1,12 @@
 from django.db.models import Count
-from rest_framework import generics, permissions, filters
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import generics, permissions, filters, status  # La til status for HTTP-responskoder
+from rest_framework.views import APIView  # Importer APIView
+from rest_framework.response import Response  # Importer Response
+from django.http import Http404  # Importer Http404
 from contentsharing.permissions import IsOwnerOrReadOnly
 from .models import Content, Category
 from .serializers import ContentSerializer, CategorySerializer
 from django_filters.rest_framework import DjangoFilterBackend
-
-
 
 class CategoryList(generics.ListCreateAPIView):
     """
@@ -20,7 +18,7 @@ class CategoryList(generics.ListCreateAPIView):
 
 class CategoryDetail(APIView):
     """
-    Retrieve a category and edit or delete it if you own it
+    Retrieve a category and edit or delete it if you own it.
     """
     permission_classes = [IsOwnerOrReadOnly]
     serializer_class = CategorySerializer
@@ -35,34 +33,26 @@ class CategoryDetail(APIView):
 
     def get(self, request, pk):
         category = self.get_object(pk)
-        serializer = CategorySerializer(
-            category, context={'request': request}
-        )
+        serializer = CategorySerializer(category, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk):
         category = self.get_object(pk)
-        serializer = CategorySerializer(
-            category, data=request.data, context={'request': request}
-        )
+        serializer = CategorySerializer(category, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(
-            serializer.errors, status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         category = self.get_object(pk)
         category.delete()
-        return Response(
-            status=status.HTTP_204_NO_CONTENT
-        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ContentList(generics.ListCreateAPIView):
     """
-    List posts or create a post if logged in
-    The perform_create method associates the post with the logged in user.
+    List posts or create a post if logged in.
+    The perform_create method associates the post with the logged-in user.
     """
     serializer_class = ContentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -79,7 +69,7 @@ class ContentList(generics.ListCreateAPIView):
     filterset_fields = [
         'owner__followed__owner__profile',
         'likes__owner__profile',
-        'owner__profile','categories__name'
+        'owner__profile', 'categories__name'
     ]
     search_fields = [
         'owner__username',
