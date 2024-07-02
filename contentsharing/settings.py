@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
-import re
 
 # Import the env.py file if it exists
 if os.path.exists('env.py'):
@@ -67,10 +66,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-LLOWED_HOSTS = [
-   os.environ.get('ALLOWED_HOST'),
-   'localhost',
-]
+ALLOWED_HOSTS = ['localhost', 'contentsharing-api-7b3cd872bc62.herokuapp.com']
 
 # Application definition
 INSTALLED_APPS = [
