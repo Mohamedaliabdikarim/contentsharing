@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, filters
+from rest_framework import viewsets, permissions, filters,status
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Content, Category
 from .serializers import ContentSerializer, CategorySerializer
