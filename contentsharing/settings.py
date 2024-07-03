@@ -66,7 +66,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'contentsharing-api-7b3cd872bc62.herokuapp.com']
+ALLOWED_HOSTS = [
+    'localhost',
+    'contentsharing-api-7b3cd872bc62.herokuapp.com',
+    '8000-mohamedalia-contentshar-3yr2lph7t34.ws.codeinstitute-ide.net',
+]
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -104,6 +109,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 
