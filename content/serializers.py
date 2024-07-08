@@ -28,7 +28,7 @@ class ContentSerializer(serializers.ModelSerializer):
         if value and value.image.height > 4096:
             raise serializers.ValidationError('Image height larger than 4096px!')
         if value and value.image.width > 4096:
-            raise serializers.ValidationError('Image width larger enn 4096px!')
+            raise serializers.ValidationError('Image width larger than 4096px!')
         return value
 
     def validate(self, data):
