@@ -14,7 +14,6 @@ class ContentSerializer(serializers.ModelSerializer):
         slug_field='name',
         queryset=Category.objects.all()
     )
-    available_categories = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
     profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
@@ -22,10 +21,6 @@ class ContentSerializer(serializers.ModelSerializer):
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
-
-    def get_available_categories(self, obj):
-        categories = Category.objects.all()
-        return CategorySerializer(categories, many=True).data
 
     def validate_image(self, value):
         if value and value.size > 2 * 1024 * 1024:
@@ -43,7 +38,7 @@ class ContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ['id', 'title', 'text', 'owner', 'is_owner', 'created_at', 'updated_at', 'categories', 'available_categories', 'image', 'profile_id', 'profile_image', 'like_id', 'likes_count', 'comments_count']
+        fields = ['id', 'title', 'text', 'owner', 'is_owner', 'created_at', 'updated_at', 'categories', 'image', 'profile_id', 'profile_image', 'like_id', 'likes_count', 'comments_count']
 
     def create(self, validated_data):
         categories_data = validated_data.pop('categories')

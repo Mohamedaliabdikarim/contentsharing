@@ -1,4 +1,3 @@
-from django.db.models import Count
 from rest_framework import generics, permissions, filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,22 +6,19 @@ from contentsharing.permissions import IsOwnerOrReadOnly
 from .models import Content, Category
 from .serializers import ContentSerializer, CategorySerializer
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Count
 
-class CategoryList(generics.ListCreateAPIView):
+class CategoryList(generics.ListAPIView):
     """
-    List all categories or create a new category.
+    List all categories.
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get(self, request, *args, **kwargs):
-        print("CategoryList view accessed")
-        return super().get(request, *args, **kwargs)
-
 class CategoryDetail(APIView):
     """
-    Retrieve a category and edit or delete it if you own it.
+    Retrieve a category.
     """
     permission_classes = [IsOwnerOrReadOnly]
     serializer_class = CategorySerializer
@@ -39,19 +35,6 @@ class CategoryDetail(APIView):
         category = self.get_object(pk)
         serializer = CategorySerializer(category, context={'request': request})
         return Response(serializer.data)
-
-    def put(self, request, pk):
-        category = self.get_object(pk)
-        serializer = CategorySerializer(category, data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        category = self.get_object(pk)
-        category.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ContentList(generics.ListCreateAPIView):
     """
@@ -99,7 +82,3 @@ class ContentDetail(generics.RetrieveUpdateDestroyAPIView):
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comment', distinct=True)
     ).order_by('-created_at')
-
-    def get(self, request, *args, **kwargs):
-        print("ContentDetail view accessed")
-        return super().get(request, *args, **kwargs)
