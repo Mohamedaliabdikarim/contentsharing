@@ -1,8 +1,8 @@
 from django.db.models import Count
-from rest_framework import generics, permissions, filters, status  # La til status for HTTP-responskoder
-from rest_framework.views import APIView  # Importer APIView
-from rest_framework.response import Response  # Importer Response
-from django.http import Http404  # Importer Http404
+from rest_framework import generics, permissions, filters, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.http import Http404
 from contentsharing.permissions import IsOwnerOrReadOnly
 from .models import Content, Category
 from .serializers import ContentSerializer, CategorySerializer
@@ -15,6 +15,10 @@ class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, *args, **kwargs):
+        print("CategoryList view accessed")
+        return super().get(request, *args, **kwargs)
 
 class CategoryDetail(APIView):
     """
@@ -95,3 +99,7 @@ class ContentDetail(generics.RetrieveUpdateDestroyAPIView):
         likes_count=Count('likes', distinct=True),
         comments_count=Count('comment', distinct=True)
     ).order_by('-created_at')
+
+    def get(self, request, *args, **kwargs):
+        print("ContentDetail view accessed")
+        return super().get(request, *args, **kwargs)

@@ -14,6 +14,7 @@ class ContentSerializer(serializers.ModelSerializer):
         slug_field='name',
         queryset=Category.objects.all()
     )
+    available_categories = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
     profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
@@ -22,13 +23,17 @@ class ContentSerializer(serializers.ModelSerializer):
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
 
+    def get_available_categories(self, obj):
+        categories = Category.objects.all()
+        return CategorySerializer(categories, many=True).data
+
     def validate_image(self, value):
         if value and value.size > 2 * 1024 * 1024:
             raise serializers.ValidationError('Image size larger than 2MB!')
         if value and value.image.height > 4096:
             raise serializers.ValidationError('Image height larger than 4096px!')
         if value and value.image.width > 4096:
-            raise serializers.ValidationError('Image width larger than 4096px!')
+            raise serializers.ValidationError('Image width larger enn 4096px!')
         return value
 
     def validate(self, data):
@@ -38,20 +43,23 @@ class ContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ['id', 'title', 'text',
-                   'owner', 'is_owner','created_at', 'updated_at',
-                   'categories', 'image', 'profile_id', 
-                   'profile_image','like_id','likes_count', 
-                   'comments_count', 'created_at',]
+        fields = ['id', 'title', 'text', 'owner', 'is_owner', 'created_at', 'updated_at', 'categories', 'available_categories', 'image', 'profile_id', 'profile_image', 'like_id', 'likes_count', 'comments_count']
 
     def create(self, validated_data):
         categories_data = validated_data.pop('categories')
-        text = Content.objects.create(**validated_data)
-        for category_name in categories_data:
-            category = Category.objects.get(name=category_name)
-            text.categories.add(category)
-        return text
+        content = Content.objects.create(**validated_data)
+        content.categories.set(categories_data)
+        return content
     
+    def update(self, instance, validated_data):
+        categories_data = validated_data.pop('categories', None)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        if categories_data is not None:
+            instance.categories.set(categories_data)
+        instance.save()
+        return instance
+
     def get_is_owner(self, obj):
         request = self.context['request']
         return request.user == obj.owner
@@ -59,8 +67,6 @@ class ContentSerializer(serializers.ModelSerializer):
     def get_like_id(self, obj):
         user = self.context['request'].user
         if user.is_authenticated:
-            like = Like.objects.filter(
-                owner=user, text=obj
-            ).first()
+            like = Like.objects.filter(owner=user, content=obj).first()
             return like.id if like else None
         return None

@@ -6,7 +6,6 @@ class Category(models.Model):
         ('Ideas', 'Ideas'),
         ('Stories', 'Stories'),
         ('Articles', 'Articles'),
-        ('Tutorials', 'Tutorials'),
         ('Journalism', 'Journalism'),
     ]
     
@@ -28,4 +27,4 @@ class Content(models.Model):
         ordering = ['-created_at']
     
     def __str__(self):
-        return f'{self.id} {self.title}'
+        return f'{self.id} {self.title} {self.categories}'
