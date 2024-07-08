@@ -1,3 +1,4 @@
+# content/serializers.py
 from rest_framework import serializers
 from .models import Content, Category
 from likes.models import Like
@@ -62,6 +63,6 @@ class ContentSerializer(serializers.ModelSerializer):
     def get_like_id(self, obj):
         user = self.context['request'].user
         if user.is_authenticated:
-            like = Like.objects.filter(owner=user, content=obj).first()
+            like = Like.objects.filter(owner=user, text=obj).first()
             return like.id if like else None
         return None
