@@ -18,7 +18,6 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [(
         'rest_framework.authentication.SessionAuthentication'
@@ -41,10 +40,10 @@ JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
 JWT_AUTH_SAMESITE = 'None'
 
-
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'contentsharing.serializers.CurrentUserSerializer'
 }
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -56,8 +55,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
    os.environ.get('ALLOWED_HOST'),
-   'localhost','contentsharing-api-7b3cd872bc62.herokuapp.com'
+   'localhost',
 ]
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -85,7 +85,6 @@ INSTALLED_APPS = [
     'followers', 
 ]
 
-
 SITE_ID = 1
 
 MIDDLEWARE = [
@@ -99,16 +98,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 if "CLIENT_ORIGIN" in os.environ:
     CORS_ALLOWED_ORIGINS = [os.environ.get("CLIENT_ORIGIN")]
 CORS_ALLOWED_ORIGIN_REGEXES = [r"^https://.*\.codeinstitute-ide\.net$", r"^https://.*\.gitpod\.io$",]
 
-
-
 CORS_ALLOW_CREDENTIALS = True
-
-
 
 ROOT_URLCONF = 'contentsharing.urls'
 
@@ -144,7 +138,6 @@ else:
     }
     print('connected')
 
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -177,5 +170,3 @@ STATIC_URL = '/static/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
