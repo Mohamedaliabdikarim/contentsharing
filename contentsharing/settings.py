@@ -186,3 +186,5 @@ def logout_route(request):
         secure=JWT_AUTH_SECURE,
     )
     return response
+
+
