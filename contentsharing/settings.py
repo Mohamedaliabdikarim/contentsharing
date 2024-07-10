@@ -124,7 +124,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'contentsharing.wsgi.application'
 
-# Database
+Database
 if 'DEV' in os.environ:
     DATABASES = {
         'default': {
