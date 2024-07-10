@@ -19,13 +19,12 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [(
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication'
         if 'DEV' in os.environ
         else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
-    )],
-    'DEFAULT_PAGINATION_CLASS':
-        'rest_framework.pagination.PageNumberPagination',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DATETIME_FORMAT': '%d %b %Y',
 }
@@ -51,11 +50,11 @@ REST_AUTH_SERIALIZERS = {
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
    os.environ.get('ALLOWED_HOST'),
-   'localhost','contentsharing-api-7b3cd872bc62.herokuapp.com'
+   'localhost', 'contentsharing-api-7b3cd872bc62.herokuapp.com'
 ]
 
 # Application definition
@@ -100,7 +99,11 @@ MIDDLEWARE = [
 
 if "CLIENT_ORIGIN" in os.environ:
     CORS_ALLOWED_ORIGINS = [os.environ.get("CLIENT_ORIGIN")]
-CORS_ALLOWED_ORIGIN_REGEXES = [r"^https://.*\.codeinstitute-ide\.net$", r"^https://.*\.gitpod\.io$",]
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.codeinstitute-ide\.net$",
+    r"^https://.*\.gitpod\.io$",
+    r"^https://.*\.yourdomain\.com$",  # Legg til ditt domene her
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -124,7 +127,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'contentsharing.wsgi.application'
 
-# Removed the stray "Database" line here
 if 'DEV' in os.environ:
     DATABASES = {
         'default': {
