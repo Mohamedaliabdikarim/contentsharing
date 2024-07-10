@@ -124,7 +124,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'contentsharing.wsgi.application'
 
-Database
+# Removed the stray "Database" line here
 if 'DEV' in os.environ:
     DATABASES = {
         'default': {
@@ -170,6 +170,3 @@ STATIC_URL = '/static/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
