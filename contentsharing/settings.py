@@ -2,6 +2,17 @@ import os
 from pathlib import Path
 import dj_database_url
 
+# Set environment variables
+os.environ['CLOUDINARY_CLOUD_NAME'] = 'djkorqmgp'
+os.environ['CLOUDINARY_API_KEY'] = '976737287159648'
+os.environ['CLOUDINARY_API_SECRET'] = 't09BBZABHQ7DgIKys8yAg3Ix57w'
+os.environ['DATABASE_URL'] = "postgres://ui3tlnmttnw:HSbsQxroOpAK@ep-gentle-mountain-a23bxz6h.eu-central-1.aws.neon.tech/lapel_stoop_swoop_130517"
+os.environ.setdefault("SECRET_KEY", "m8o1kd(3h@4(u*nqc*(1z(ntm0hskzef4v!+k+p#zrxqcx&=uj")
+
+# Check for dev environment
+if 'CLIENT_ORIGIN_DEV' in os.environ:
+    os.environ['CLIENT_ORIGIN'] = os.environ['CLIENT_ORIGIN_DEV']
+
 # Import the env.py file if it exists
 if os.path.exists('env.py'):
     import env
@@ -165,12 +176,12 @@ REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'contentsharing.serializers.CurrentUserSerializer'
 }
 
-# Sett CSRF-cookie-innstillinger for HTTPS og SAMESITE=None
+# CSRF cookie settings for HTTPS and SAMESITE=None
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
 
-# Konfigurer autentiseringsklasser for produksjonsmiljøet
-# Bruk JWTCookieAuthentication for autentisering
+# Configure authentication classes for production environment
+# Use JWTCookieAuthentication for authentication
 DEFAULT_AUTHENTICATION_CLASSES = [
     'rest_framework.authentication.SessionAuthentication' if DEBUG else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
 ]
