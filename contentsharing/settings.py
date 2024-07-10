@@ -54,8 +54,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'profiles',
-    'content',
-    'comment',
+    'posts',
+    'comments',
     'likes',
     'followers',
 ]
