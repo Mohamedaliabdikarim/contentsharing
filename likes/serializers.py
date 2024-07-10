@@ -22,4 +22,4 @@ class LikeSerializer(serializers.ModelSerializer):
                 'detail': 'possible duplicate'
             })
 
-            
+        
