@@ -179,3 +179,4 @@ JWT_AUTH_SAMESITE = 'None'
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'contentsharing.serializers.CurrentUserSerializer'
 }
+
