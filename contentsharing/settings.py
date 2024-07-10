@@ -60,6 +60,7 @@ ALLOWED_HOSTS = [
     '8000-mohamedalia-contentshar-3yr2lph7t34.ws.codeinstitute-ide.net',
 ]
 
+CORS_ALLOW_CREDENTIALS = True
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
