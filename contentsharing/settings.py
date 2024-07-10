@@ -164,3 +164,13 @@ JWT_AUTH_SAMESITE = 'None'
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'contentsharing.serializers.CurrentUserSerializer'
 }
+
+# Sett CSRF-cookie-innstillinger for HTTPS og SAMESITE=None
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+
+# Konfigurer autentiseringsklasser for produksjonsmiljøet
+# Bruk JWTCookieAuthentication for autentisering
+DEFAULT_AUTHENTICATION_CLASSES = [
+    'rest_framework.authentication.SessionAuthentication' if DEBUG else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+]
