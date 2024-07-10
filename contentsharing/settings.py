@@ -56,7 +56,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
    os.environ.get('ALLOWED_HOST'),
-   'localhost',
+   'localhost','contentsharing-api-7b3cd872bc62.herokuapp.com'
 ]
 # Application definition
 INSTALLED_APPS = [
