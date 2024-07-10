@@ -1,13 +1,19 @@
 from django.db.models import Count
 from rest_framework import generics, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from contentsharing.permissions import IsOwnerOrReadOnly
+from rest_framework.response import Response
 from .models import Post, Category
 from .serializers import PostSerializer, CategorySerializer
+from contentsharing.permissions import IsOwnerOrReadOnly
 
 class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"results": serializer.data})
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
