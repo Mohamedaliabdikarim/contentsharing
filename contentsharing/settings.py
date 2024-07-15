@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import dj_database_url
+import re
 
 # Import the env.py file if it exists
 if os.path.exists('env.py'):
