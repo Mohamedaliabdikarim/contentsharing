@@ -147,7 +147,7 @@ The following additional utilities, apps, and modules were also used:
 
 ### Manual Testing
 
-Manual tests were conducted for each endpoint using the Django Rest Framework HTML interface on a local server with the deployed database. Detailed testing procedures can be found in the `testing.md` document.
+Manual tests were conducted for each endpoint using the Django Rest Framework HTML interface on a local server with the deployed database. Detailed testing procedures can be found in the [`testing.md`](https://github.com/Mohamedaliabdikarim/contentsharing/blob/main/testing.md) document.
 
 Each feature of the deployed API was tested according to the testing and acceptance criteria outlined for each React frontend user story. These tests are documented in the README of the respective frontend project.
 
