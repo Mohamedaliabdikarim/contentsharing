@@ -61,3 +61,25 @@ JSOM :
 
 - Make a POST request with invalid or incomplete data.
 - Verify that the response contains appropriate validation error messages.
+
+
+# LikeList
+
+- ## List Likes
+-  Ensure that unauthenticated users can view the list of likes.
+-  Verify that authenticated users can view the list of likes.
+![](readme_media/testing/test8.png)
+
+- ## Create Lik
+    Verify that an authenticated user can create a like.
+    Check that the created like is associated with the authenticated user.
+    ![](readme_media/testing/test9.png)
+
+- ## Create Like (Unauthenticated User):
+- Verify that an unauthenticated user cannot create a like and receives an appropriate error message.
+![](readme_media/testing/test10.png)
+
+- ##  Delete Lik
+- Verify that the owner of a like can delete it.
+- Ensure the like is removed from the database after deletion.
+![](readme_media/testing/test11.png)
