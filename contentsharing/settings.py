@@ -26,7 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = 'DEV' in os.environ
 DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
@@ -101,20 +100,14 @@ WSGI_APPLICATION = 'contentsharing.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# if DEBUG:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': BASE_DIR / 'db.sqlite3',
-#         }
-#     }
-# else:
-#     DATABASES = {
-#         'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
-#     }
+database_url = os.environ.get("DATABASE_URL")
+
+# Ensure the database URL is a string, not bytes
+if isinstance(database_url, bytes):
+    database_url = database_url.decode('utf-8')
 
 DATABASES = {
-        'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    'default': dj_database_url.parse(database_url)
 }
 
 # Password validation
