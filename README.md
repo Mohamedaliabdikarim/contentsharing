@@ -208,3 +208,7 @@ Your API will now be deployed to Heroku, and you can access it using the provide
 ## Python Validation
 
 All files with custom Python code were subsequently validated using the [Code Institute Python Linter](https://pep8ci.herokuapp.com/); no errors found.
+
+# Acknowledgements
+
+This website stands as the culmination of my efforts during the Portfolio 4 Project for the Full Stack Software Developer (e-Commerce) Diploma at the Code Institute. I extend my heartfelt gratitude to my mentor,Jubril Akolade, the invaluable Slack community, and everyone at the Code Institute for their unwavering assistance and support throughout this journey. While Wawas Woods is a fictitious entity, its presence is tangible in every aspect except for the business title. At present, it is more than just a project – it is a passion!
