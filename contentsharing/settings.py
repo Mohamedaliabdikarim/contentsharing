@@ -30,8 +30,9 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     'contentsharing-api-7b3cd872bc62.herokuapp.com',
-    '8000-mohamedalia-contentshar-3yr2lph7t34.ws.codeinstitute-ide.net',
+    '8000-mohamedalia-contentshar-82unb77w9k4.ws.codeinstitute-ide.net',
 ]
+
 
 # Application definition
 INSTALLED_APPS = [
